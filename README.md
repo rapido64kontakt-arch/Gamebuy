@@ -1,30 +1,24 @@
-# GamePath MVP
+# Gamebuy
 
-Ein klickbarer MVP für die Idee: "Sag uns, welches Game du willst. Wir finden den günstigsten Kaufweg."
+**Dein Game. Der günstigste Weg.**
 
-## Start
-Öffne `index.html` direkt im Browser.
+Gamebuy ist ein MVP: Du sagst, welches Spiel du willst, auf welcher Plattform und in welcher Region. Gamebuy ermittelt daraus den günstigsten Kaufweg, statt nur eine lange Liste von Shops anzuzeigen.
 
-Für lokales Hosting:
-```bash
-python3 -m http.server 8080
-```
-Dann `http://localhost:8080` öffnen.
-
-## Was funktioniert
-- Natural-Language-artige Suche für drei Demo-Games
-- Berechnung des effektiven Preises aus mehreren Guthabenkarten
-- Ersparnis und Prozentvorteil
-- Responsive UI
+## Aktueller MVP
+- Suche für drei Demo-Games
+- regulärer Storepreis vs. optimierter Kaufweg
+- Kombination mehrerer Guthabenkarten
+- Ersparnis und effektiver Endpreis
+- responsive Oberfläche
 - Fake-Door-Kaufbutton zur Validierung der Kaufabsicht
 
 ## Wichtig
-Die enthaltenen Preise sind Demo-/Beispieldaten. Vor einem öffentlichen Livegang müssen Preis-APIs, Affiliate-Links, Analytics, rechtliche Texte und ein echtes Backend angeschlossen werden.
+Die aktuell angezeigten Preise sind Beispieldaten und keine Live-Angebote. Der MVP verkauft noch keine Produkte und verarbeitet keine Zahlungen.
 
-## Sinnvolle nächste technische Schritte
-1. Preis-API/Partnerfeeds anbinden
-2. Giftcard-Kombinationsoptimierer serverseitig bauen
-3. Suchparser/LLM für Spiel + Plattform + Region
-4. Analytics für Search -> Result -> Buy Intent
-5. Affiliate Redirect Service
-6. Erst nach Validierung: Reseller-API + Payment + Code-Auslieferung
+## Nächste Schritte
+1. Live-Preisquellen und Partnerfeeds
+2. Giftcard-Kombinationsoptimierer
+3. Parser für Spiel, Plattform, Edition und Region
+4. Analytics
+5. Affiliate-Weiterleitungen
+6. später Reseller-API, Payment und Code-Auslieferung
