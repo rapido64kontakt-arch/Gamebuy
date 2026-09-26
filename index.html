@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GamePath — Finde den günstigsten Weg zu deinem Game</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="glow g1"></div><div class="glow g2"></div>
+<header>
+  <a class="brand" href="#"><span class="logo">G</span><span>GamePath</span><b>BETA</b></a>
+  <nav><a href="#how">So funktioniert's</a><a href="#why">Warum?</a></nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="eyebrow">DEIN GAME. DER GÜNSTIGSTE WEG.</div>
+  <h1>Welches Game<br><span>willst du?</span></h1>
+  <p class="lead">Sag uns einfach Spiel und Plattform. Wir vergleichen Kaufwege, Keys und Guthaben-Kombinationen – und zeigen dir den effektiven Endpreis.</p>
+
+  <form id="searchForm" class="search">
+    <div class="inputWrap">
+      <span class="spark">✦</span>
+      <input id="query" autocomplete="off" placeholder="z. B. Crimson Desert für PS5 digital" value="Crimson Desert für PS5 digital">
+      <button type="submit">Preis finden <span>→</span></button>
+    </div>
+    <div class="chips">
+      <button type="button" data-q="Crimson Desert für PS5 digital">Crimson Desert · PS5</button>
+      <button type="button" data-q="GTA VI für PS5 digital">GTA VI · PS5</button>
+      <button type="button" data-q="Elden Ring für PS5 digital">Elden Ring · PS5</button>
+    </div>
+  </form>
+
+  <div id="result" class="result hidden">
+    <div class="resultTop">
+      <div>
+        <div class="tag">BESTER KAUFWEG</div>
+        <h2 id="gameName">Crimson Desert</h2>
+        <div id="meta" class="meta">PlayStation 5 · Digital · Deutschland</div>
+      </div>
+      <div class="save"><small>DU SPARST</small><strong id="saving">11,58 €</strong></div>
+    </div>
+
+    <div class="priceRow">
+      <div><small>REGULÄRER STOREPREIS</small><div id="regular" class="regular">69,99 €</div></div>
+      <div class="arrow">→</div>
+      <div><small>DEIN EFFEKTIVER PREIS</small><div id="best" class="best">58,41 €</div></div>
+    </div>
+
+    <div class="route">
+      <div class="routeHead"><span>Optimierter Kaufweg</span><span id="routeDiscount">−16,5 %</span></div>
+      <div id="cards"></div>
+      <div class="routeItem total"><span>Gesamtkosten</span><b id="routeTotal">58,41 €</b></div>
+    </div>
+
+    <button id="buy" class="buy">Günstig kaufen <span>→</span></button>
+    <p class="fine">MVP-Demo: Noch kein echter Checkout. Preise im Prototyp sind Beispieldaten und werden vor einem Livegang an Preis-APIs angebunden.</p>
+  </div>
+</section>
+
+<section id="how" class="steps">
+  <div class="sectionLabel">SO FUNKTIONIERT'S</div>
+  <h3>Kein Preisvergleich.<br>Ein <span>Kaufweg.</span></h3>
+  <div class="grid">
+    <article><i>01</i><h4>Game sagen</h4><p>„Ich will Crimson Desert auf PS5 digital.“ Keine Filter, keine Shoplisten.</p></article>
+    <article><i>02</i><h4>Wir optimieren</h4><p>Storepreise, Keys und Guthabenkarten werden zu einem effektiven Endpreis kombiniert.</p></article>
+    <article><i>03</i><h4>Günstig kaufen</h4><p>Du bekommst genau den Kaufweg, der zu deiner Plattform und Region passt.</p></article>
+  </div>
+</section>
+
+<section id="why" class="statement">
+  <p>Andere zeigen dir <s>30 Angebote.</s></p>
+  <h3>Wir zeigen dir <span>eins.</span></h3>
+</section>
+</main>
+
+<footer><span>GamePath · MVP 0.1</span><span>Made for gamers who hate overpaying.</span></footer>
+
+<div id="toast" class="toast">Kaufinteresse erfasst ✓</div>
+<script src="app.js"></script>
+</body></html>
