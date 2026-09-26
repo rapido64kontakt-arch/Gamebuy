@@ -1,24 +1,27 @@
-# Gamebuy
+# Gamebuy — Optimizer MVP 0.3
 
-**Dein Game. Der günstigste Weg.**
+Diese Version enthält erstmals einen echten Kaufweg-Optimierer.
 
-Gamebuy ist ein MVP: Du sagst, welches Spiel du willst, auf welcher Plattform und in welcher Region. Gamebuy ermittelt daraus den günstigsten Kaufweg, statt nur eine lange Liste von Shops anzuzeigen.
+## Was funktioniert
 
-## Aktueller MVP
-- Suche für drei Demo-Games
-- regulärer Storepreis vs. optimierter Kaufweg
-- Kombination mehrerer Guthabenkarten
-- Ersparnis und effektiver Endpreis
+- Storepreis frei eingeben
+- beliebig viele Guthabenkarten mit Nennwert und Einkaufspreis anlegen
+- automatische Suche nach der günstigsten Kartenkombination
+- Berechnung von Guthaben, Restguthaben, effektiven Kosten und Ersparnis
 - responsive Oberfläche
-- Fake-Door-Kaufbutton zur Validierung der Kaufabsicht
 
-## Wichtig
-Die aktuell angezeigten Preise sind Beispieldaten und keine Live-Angebote. Der MVP verkauft noch keine Produkte und verarbeitet keine Zahlungen.
+Der Algorithmus ist nicht auf Crimson Desert oder eine bestimmte Kartenkombination fest programmiert.
 
-## Nächste Schritte
-1. Live-Preisquellen und Partnerfeeds
-2. Giftcard-Kombinationsoptimierer
-3. Parser für Spiel, Plattform, Edition und Region
-4. Analytics
-5. Affiliate-Weiterleitungen
-6. später Reseller-API, Payment und Code-Auslieferung
+## Noch Demo
+
+Die voreingetragenen Kartenpreise sind Beispieldaten. Es gibt noch keine Live-Preisfeeds, keinen Checkout und keine Zahlungsabwicklung.
+
+## Nächster technischer Schritt
+
+Live-Datenquellen anbinden:
+1. Storepreis des Spiels
+2. verfügbare Giftcards inklusive Gebühren und Region
+3. Anbieter-/Affiliate-Link
+4. Zeitstempel und Verfügbarkeitsprüfung
+
+Danach kann derselbe Optimierer automatisch mit echten Angeboten rechnen.

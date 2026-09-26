@@ -3,36 +3,71 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Gamebuy findet den günstigsten Kaufweg für dein Game – Storepreis, Keys und Guthaben clever kombiniert.">
-<title>Gamebuy — Dein Game. Der günstigste Weg.</title>
+<meta name="description" content="Gamebuy berechnet den günstigsten Kaufweg für Games.">
+<title>Gamebuy — Kaufweg-Optimizer</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="glow g1"></div><div class="glow g2"></div>
 <header>
-  <a class="brand" href="#"><span class="logo">G</span><span>Gamebuy</span><b>BETA</b></a>
-  <nav><a href="#how">So funktioniert's</a><a href="#why">Warum Gamebuy?</a></nav>
+  <a class="brand" href="#"><span class="logo">G</span><span>Gamebuy</span><b>OPTIMIZER MVP</b></a>
+  <nav><a href="#optimizer">Optimizer</a><a href="#how">Logik</a></nav>
 </header>
+
 <main>
-<section class="hero">
+<section class="hero" id="optimizer">
   <div class="eyebrow">DEIN GAME. DER GÜNSTIGSTE WEG.</div>
-  <h1>Welches Game<br><span>willst du?</span></h1>
-  <p class="lead">Sag uns einfach Spiel und Plattform. Gamebuy vergleicht Kaufwege, Keys und Guthaben-Kombinationen – und zeigt dir den günstigsten effektiven Endpreis.</p>
-  <form id="searchForm" class="search">
-    <div class="inputWrap"><span class="spark">✦</span><input id="query" autocomplete="off" placeholder="z. B. Crimson Desert für PS5 digital" value="Crimson Desert für PS5 digital"><button type="submit">Preis finden <span>→</span></button></div>
-    <div class="chips"><button type="button" data-q="Crimson Desert für PS5 digital">Crimson Desert · PS5</button><button type="button" data-q="GTA VI für PS5 digital">GTA VI · PS5</button><button type="button" data-q="Elden Ring für PS5 digital">Elden Ring · PS5</button></div>
-  </form>
+  <h1>Gamebuy<br><span>Optimizer.</span></h1>
+  <p class="lead">Diese Version berechnet den Kaufweg wirklich. Gib Storepreis und verfügbare Guthabenkarten ein – Gamebuy testet automatisch alle sinnvollen Kombinationen.</p>
+
+  <div class="optimizer">
+    <div class="formGrid">
+      <label>Game<input id="game" value="Crimson Desert"></label>
+      <label>Storepreis (€)<input id="storePrice" type="number" min="0" step="0.01" value="69.99"></label>
+      <label>Plattform<select id="platform"><option>PlayStation 5</option><option>Xbox Series</option><option>PC</option></select></label>
+      <label>Region<select id="region"><option>Deutschland</option></select></label>
+    </div>
+
+    <div class="cardsEditor">
+      <div class="editorHead"><div><small>VERFÜGBARES GUTHABEN</small><h2>Karten & Einkaufspreise</h2></div><button id="addCard" class="ghost" type="button">+ Karte</button></div>
+      <div class="cardHeader"><span>Nennwert</span><span>Kaufpreis</span><span></span></div>
+      <div id="cardRows"></div>
+    </div>
+
+    <button id="calculate" class="buy">Günstigsten Kaufweg berechnen <span>→</span></button>
+    <p class="fine">Die Startwerte sind Demo-Daten. Der Optimierer selbst rechnet live im Browser und ist nicht auf feste Kombinationen programmiert.</p>
+  </div>
+
   <div id="result" class="result hidden">
-    <div class="resultTop"><div><div class="tag">BESTER KAUFWEG</div><h2 id="gameName">Crimson Desert</h2><div id="meta" class="meta">PlayStation 5 · Digital · Deutschland</div></div><div class="save"><small>DU SPARST</small><strong id="saving">11,58 €</strong></div></div>
-    <div class="priceRow"><div><small>REGULÄRER STOREPREIS</small><div id="regular" class="regular">69,99 €</div></div><div class="arrow">→</div><div><small>DEIN EFFEKTIVER PREIS</small><div id="best" class="best">58,41 €</div></div></div>
-    <div class="route"><div class="routeHead"><span>Optimierter Kaufweg</span><span id="routeDiscount">−16,5 %</span></div><div id="cards"></div><div class="routeItem total"><span>Gesamtkosten</span><b id="routeTotal">58,41 €</b></div></div>
-    <button id="buy" class="buy">Günstig kaufen <span>→</span></button>
-    <p class="fine">MVP-Demo · Noch kein echter Checkout. Die angezeigten Preise sind Beispieldaten und keine Live-Angebote.</p>
+    <div class="resultTop">
+      <div><div class="tag">OPTIMALER KAUFWEG</div><h2 id="gameName"></h2><div id="meta" class="meta"></div></div>
+      <div class="save"><small>DU SPARST</small><strong id="saving"></strong></div>
+    </div>
+    <div class="priceRow">
+      <div><small>STOREPREIS</small><div id="regular" class="regular"></div></div>
+      <div class="arrow">→</div>
+      <div><small>EFFEKTIVE KOSTEN</small><div id="best" class="best"></div></div>
+    </div>
+    <div class="route">
+      <div class="routeHead"><span>Von Gamebuy berechnet</span><span id="routeDiscount"></span></div>
+      <div id="routeCards"></div>
+      <div class="routeItem"><span>Guthaben gesamt</span><b id="creditTotal"></b></div>
+      <div class="routeItem"><span>Restguthaben nach Kauf</span><b id="leftover"></b></div>
+      <div class="routeItem total"><span>Deine Kosten</span><b id="routeTotal"></b></div>
+    </div>
   </div>
 </section>
-<section id="how" class="steps"><div class="sectionLabel">SO FUNKTIONIERT'S</div><h3>Kein Preisvergleich.<br>Ein <span>Kaufweg.</span></h3><div class="grid"><article><i>01</i><h4>Game sagen</h4><p>„Ich will Crimson Desert auf PS5 digital.“ Keine endlosen Filter und Shoplisten.</p></article><article><i>02</i><h4>Gamebuy optimiert</h4><p>Storepreise, Keys und Guthabenkarten werden zu einem effektiven Endpreis kombiniert.</p></article><article><i>03</i><h4>Günstig kaufen</h4><p>Du bekommst den passenden Kaufweg für Plattform und Region – klar und direkt.</p></article></div></section>
-<section id="why" class="statement"><p>Andere zeigen dir <s>30 Angebote.</s></p><h3>Gamebuy zeigt dir <span>den Weg.</span></h3></section>
+
+<section id="how" class="steps">
+  <div class="sectionLabel">WAS JETZT FUNKTIONIERT</div>
+  <h3>Nicht mehr fest verdrahtet.<br><span>Echte Optimierung.</span></h3>
+  <div class="grid">
+    <article><i>01</i><h4>Beliebige Karten</h4><p>Du kannst Nennwerte und tatsächliche Einkaufspreise hinzufügen, ändern oder entfernen.</p></article>
+    <article><i>02</i><h4>Kombinationen testen</h4><p>Der Algorithmus sucht die günstigste Kombination, deren Guthaben für das Game ausreicht.</p></article>
+    <article><i>03</i><h4>Nächster Anschluss</h4><p>Später kommen diese Werte automatisch aus Live-Preisfeeds statt aus manuellen Eingaben.</p></article>
+  </div>
+</section>
 </main>
-<footer><span>Gamebuy · MVP 0.2</span><span>Made for gamers who hate overpaying.</span></footer>
-<div id="toast" class="toast">Kaufinteresse erfasst ✓</div><script src="app.js"></script>
+<footer><span>Gamebuy · Optimizer MVP 0.3</span><span>Live-Datenquellen folgen als nächster Schritt.</span></footer>
+<script src="app.js"></script>
 </body></html>

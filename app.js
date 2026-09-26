@@ -1,18 +1,83 @@
-const games=[
-{name:"Crimson Desert",aliases:["crimson desert"],platform:"PlayStation 5",regular:69.99,cards:[["50 € PSN Deutschland",41.68],["20 € PSN Deutschland",16.73]]},
-{name:"GTA VI",aliases:["gta vi","gta 6","grand theft auto vi"],platform:"PlayStation 5",regular:79.99,cards:[["50 € PSN Deutschland",42.49],["30 € PSN Deutschland",25.29]]},
-{name:"Elden Ring",aliases:["elden ring"],platform:"PlayStation 5",regular:59.99,cards:[["60 € PSN Deutschland",51.14]]}
-];
 const eur=n=>n.toLocaleString("de-DE",{style:"currency",currency:"EUR"});
-function findGame(q){q=q.toLowerCase();return games.find(g=>g.aliases.some(a=>q.includes(a)))||games[0]}
-function render(g){
- const total=g.cards.reduce((a,c)=>a+c[1],0),saving=g.regular-total,pct=saving/g.regular*100;
- gameName.textContent=g.name;meta.textContent=g.platform+" · Digital · Deutschland";
- regular.textContent=eur(g.regular);best.textContent=eur(total);saving.textContent=eur(saving);
- routeDiscount.textContent="−"+pct.toFixed(1).replace(".",",")+" %";routeTotal.textContent=eur(total);
- cards.innerHTML=g.cards.map(c=>`<div class="routeItem"><span>${c[0]} <em>optimierter Anbieter</em></span><b>${eur(c[1])}</b></div>`).join("");
- result.classList.remove("hidden");setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"center"}),80);
+const rows=document.getElementById("cardRows");
+const defaults=[{face:50,cost:41.68},{face:20,cost:16.73},{face:10,cost:8.79}];
+
+function addRow(face="",cost=""){
+  const row=document.createElement("div"); row.className="cardRow";
+  row.innerHTML=`<input class="face" type="number" min="0.01" step="0.01" value="${face}" aria-label="Nennwert"><input class="cost" type="number" min="0.01" step="0.01" value="${cost}" aria-label="Kaufpreis"><button class="remove" type="button" title="Entfernen">×</button>`;
+  row.querySelector(".remove").onclick=()=>row.remove();
+  rows.appendChild(row);
 }
-searchForm.addEventListener("submit",e=>{e.preventDefault();render(findGame(query.value))});
-document.querySelectorAll(".chips button").forEach(b=>b.onclick=()=>{query.value=b.dataset.q;render(findGame(query.value))});
-buy.onclick=()=>{toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)};
+defaults.forEach(x=>addRow(x.face,x.cost));
+document.getElementById("addCard").onclick=()=>addRow();
+
+function getCards(){
+  return [...document.querySelectorAll(".cardRow")].map(r=>({
+    face:parseFloat(r.querySelector(".face").value),
+    cost:parseFloat(r.querySelector(".cost").value)
+  })).filter(x=>Number.isFinite(x.face)&&Number.isFinite(x.cost)&&x.face>0&&x.cost>0);
+}
+
+/* Unbounded integer optimization.
+   State = exact wallet face value in cents.
+   For each reachable value, keep the lowest real purchase cost and card counts.
+   We search only far enough above the game price to guarantee a useful solution. */
+function optimize(targetEuro,cards){
+  const target=Math.round(targetEuro*100);
+  const normalized=cards.map((c,i)=>({face:Math.round(c.face*100),cost:Math.round(c.cost*100),i,...c}));
+  if(!normalized.length) return null;
+  const maxFace=Math.max(...normalized.map(c=>c.face));
+  const limit=target+maxFace*2;
+  const dp=Array(limit+1).fill(null);
+  dp[0]={cost:0,counts:Array(cards.length).fill(0)};
+  for(let value=0;value<=limit;value++){
+    if(!dp[value]) continue;
+    for(const c of normalized){
+      const nv=value+c.face;
+      if(nv>limit) continue;
+      const nc=dp[value].cost+c.cost;
+      if(!dp[nv]||nc<dp[nv].cost){
+        const counts=[...dp[value].counts]; counts[c.i]++;
+        dp[nv]={cost:nc,counts};
+      }
+    }
+  }
+  let best=null;
+  for(let value=target;value<=limit;value++){
+    if(!dp[value]) continue;
+    const candidate={credit:value,cost:dp[value].cost,counts:dp[value].counts};
+    if(!best || candidate.cost<best.cost || (candidate.cost===best.cost && candidate.credit<best.credit)) best=candidate;
+  }
+  return best;
+}
+
+function calculate(){
+  const price=parseFloat(document.getElementById("storePrice").value);
+  const cards=getCards();
+  if(!Number.isFinite(price)||price<=0||!cards.length){alert("Bitte Storepreis und mindestens eine gültige Guthabenkarte eintragen.");return;}
+  const opt=optimize(price,cards);
+  if(!opt){alert("Keine Kombination gefunden.");return;}
+
+  const cost=opt.cost/100, credit=opt.credit/100, save=price-cost, pct=(save/price)*100;
+  document.getElementById("gameName").textContent=document.getElementById("game").value.trim()||"Dein Game";
+  document.getElementById("meta").textContent=`${document.getElementById("platform").value} · Digital · ${document.getElementById("region").value}`;
+  document.getElementById("regular").textContent=eur(price);
+  document.getElementById("best").textContent=eur(cost);
+  document.getElementById("saving").textContent=save>=0?eur(save):"0,00 €";
+  document.getElementById("routeDiscount").textContent=save>0?`−${pct.toFixed(1).replace(".",",")} %`:"kein Vorteil";
+  document.getElementById("creditTotal").textContent=eur(credit);
+  document.getElementById("leftover").textContent=eur(credit-price);
+  document.getElementById("routeTotal").textContent=eur(cost);
+
+  const route=document.getElementById("routeCards"); route.innerHTML="";
+  opt.counts.forEach((count,i)=>{
+    if(!count)return;
+    const c=cards[i], line=document.createElement("div"); line.className="routeItem";
+    line.innerHTML=`<span>${count}× ${eur(c.face)} Guthaben <em>je ${eur(c.cost)}</em></span><b>${eur(count*c.cost)}</b>`;
+    route.appendChild(line);
+  });
+  document.getElementById("result").classList.remove("hidden");
+  setTimeout(()=>document.getElementById("result").scrollIntoView({behavior:"smooth",block:"center"}),80);
+}
+document.getElementById("calculate").onclick=calculate;
+calculate();
